@@ -19,17 +19,17 @@ Mocha unit tests live in `test/`
 ### Set up
 
 ```bash
-npm install
+$ npm install
 ```
 
 ### Running the grunt tasks
 
-```shell
+```bash
 #linting and unit tests
-grunt test
+$ grunt test
 
 #default tasks / compile & copy to app directory, start static dev server, watch files
-grunt
+$ grunt
 ```
 
 *See `gruntfile.js` for more details of the grunt tasks*
