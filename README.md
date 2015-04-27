@@ -16,11 +16,15 @@ The compiled app files are copied into `_app/` (don't edit anything in this fold
 
 Mocha unit tests live in `test/`
 
+### Set up
+
+```bash
+npm install
+```
+
 ### Running the grunt tasks
 
-```
-npm install
-
+```shell
 #linting and unit tests
 grunt test
 
@@ -28,7 +32,7 @@ grunt test
 grunt
 ```
 
-*See gruntfile.js for more details of the grunt tasks*
+*See `gruntfile.js` for more details of the grunt tasks*
 
 
 
