@@ -1,6 +1,6 @@
 # project-boilerplate
 
-This is the project starter boilerplate I use for my own personal projects.
+This is the starter boilerplate I use for my own personal web-based projects, with a simple default directory structure, example 'placeholder' files, JS libraries, and grunt tasks set up for various essentials such as unit testing, linting, compiling CSS and managing JS dependencies 
 
 Feel free to download / fork and use as you wish.
 
