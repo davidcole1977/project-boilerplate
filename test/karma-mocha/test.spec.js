@@ -1,5 +1,4 @@
-var expect = require('chai').expect,
-    module = require('../src/js/module');
+var module = require('../../src/js/module');
 
 describe('Arithmetic', function() {
 
@@ -12,7 +11,7 @@ describe('Arithmetic', function() {
         sum = arithmetic.sum;
 
     it('exists', function () {
-      expect(typeof sum).to.equal('function');
+      expect(sum).to.exist;
     });
 
     it('correctly adds two numbers together', function () {

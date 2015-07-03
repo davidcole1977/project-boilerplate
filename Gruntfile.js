@@ -15,29 +15,72 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
     jshint: {
       app: {
         src: ['src/js/**/*.js', '!src/js/vendor/*']
       },
       test: {
+        options: {
+          expr: true // so that jshint doesn't complain about chai assertions that look like expressions
+        },
         src: [ 'test/**/*.js']
       },
       gruntfile: {
         src: ['Gruntfile.js']
       }
     },
+
     mochaTest: {
       dev: {
         options: {
           reporter: 'spec',
           clearRequireCache: true // Optionally clear the require cache before running tests (defaults to false) 
         },
-        src: ['test/**/*.spec.js']
+        src: ['test/node-mocha/*.spec.js']
       }
     },
+
+    karma: {
+      dev: {
+        options: {
+          basePath: '',
+          frameworks: ['browserify', 'mocha', 'chai'],
+          plugins: [
+            'karma-phantomjs-launcher',
+            'karma-chrome-launcher',
+            'karma-mocha',
+            'karma-chai',
+            'karma-browserify',
+            'karma-mocha-reporter'
+          ],
+          files: [
+            'test/karma-mocha/*.spec.js',
+            {
+              pattern: 'src/js/*.js',
+              watched: true,
+              included: false,
+              served: false
+            }
+          ],
+          preprocessors: {
+            'test/karma-mocha/*.spec.js': ['browserify']
+          },
+          reporters: ['mocha'],
+          // browsers: ['Chrome'],
+          browsers: ['PhantomJS'],
+          port: 9876,
+          colors: true,
+          autoWatch: true,
+          singleRun: false
+        }
+      }
+    },
+
     clean: {
       app: ['_app/']
     },
+
     copy: {
       vendorJs: {
         expand: true,
@@ -58,6 +101,7 @@ module.exports = function(grunt) {
         dest: '_app/'
       }
     },
+
     browserify: {
       app: {
         files: {
@@ -65,6 +109,7 @@ module.exports = function(grunt) {
         }
       }
     },
+
     sass: {
       options: {
         sourceMap: true
@@ -79,6 +124,7 @@ module.exports = function(grunt) {
         }
       }
     },
+
     watch: {
       appTestJs: {
         files: ['src/js/**/*.js', '!src/js/vendor/*'],
@@ -113,6 +159,7 @@ module.exports = function(grunt) {
         tasks: ['sass']
       }
     }
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -122,6 +169,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('default', [
     'clean',
@@ -130,6 +178,10 @@ module.exports = function(grunt) {
     'browserify',
     'serveStaticFiles',
     'watch'
+  ]);
+
+  grunt.registerTask('karma-test', [
+    'karma'
   ]);
 
   // for some reason browserify doesn't like to run after mochaTest in the grunt default task list,

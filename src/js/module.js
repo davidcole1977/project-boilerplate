@@ -1,7 +1,5 @@
 module.exports = (function () {
 
-  console.log('loaded module');
-
   function Arithmetic () {
 
   }
