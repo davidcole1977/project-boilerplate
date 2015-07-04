@@ -1,13 +1,16 @@
 {
   "name": "project-boilerplate",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt dist --verbose"
+  },
+  "homepage": "https://github.com/davidcole1977/project-boilerplate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidcole1977/project-boilerplate.git"
   },
   "author": "David Cole",
-  "license": "ISC",
+  "license": "LGPL-2.1",
   "devDependencies": {
     "chai": "^2.3.0",
     "chalk": "^1.0.0",
@@ -18,8 +21,12 @@
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-coveralls": "^1.0.0",
+    "grunt-env": "^0.4.4",
+    "grunt-istanbul": "^0.6.1",
     "grunt-karma": "^0.11.2",
     "grunt-mocha-test": "^0.12.7",
+    "grunt-open": "^0.2.3",
     "grunt-sass": "^0.18.1",
     "karma": "^0.12.37",
     "karma-bro": "^0.11.1",

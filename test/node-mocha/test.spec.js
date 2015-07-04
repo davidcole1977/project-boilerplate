@@ -1,5 +1,6 @@
 var expect = require('chai').expect,
-    module = require('../../src/js/module');
+    libDir = process.env.LIB_DIR || '../../src/js/',
+    module = require(libDir + 'module');
 
 describe('Arithmetic', function() {
 

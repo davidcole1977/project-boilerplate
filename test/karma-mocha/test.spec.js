@@ -1,4 +1,5 @@
-var module = require('../../src/js/module');
+var libDir = process.env.LIB_DIR || '../../src/js/',
+    module = require('../../src/js/module');
 
 describe('Arithmetic', function() {
 

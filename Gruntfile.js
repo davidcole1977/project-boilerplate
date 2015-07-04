@@ -13,8 +13,29 @@ module.exports = function(grunt) {
     console.log(chalk.cyan('Server started at localhost:3000'));
   });
 
+  grunt.registerMultiTask('simple_log', function () {
+    var logText = this.options().logText;
+
+    grunt.log.ok(logText);
+  });
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
+    simple_log: {
+      coverage_complete: {
+        options: {
+          logText: 'Coverage report available at coverage/reports/icov-report/index.html'
+        }
+      }
+    },
+
+    open: {
+      localhost: {
+        path: 'http://localhost:3000',
+        app: 'Firefox'
+      }
+    },
 
     jshint: {
       app: {
@@ -24,7 +45,7 @@ module.exports = function(grunt) {
         options: {
           expr: true // so that jshint doesn't complain about chai assertions that look like expressions
         },
-        src: [ 'test/**/*.js']
+        src: ['test/**/*.js', '!test/coverage/**/*.js']
       },
       gruntfile: {
         src: ['Gruntfile.js']
@@ -42,37 +63,46 @@ module.exports = function(grunt) {
     },
 
     karma: {
-      dev: {
+      options: {
+        basePath: '',
+        frameworks: ['browserify', 'mocha', 'chai'],
+        plugins: [
+          'karma-phantomjs-launcher',
+          'karma-chrome-launcher',
+          'karma-mocha',
+          'karma-chai',
+          'karma-browserify',
+          'karma-mocha-reporter'
+        ],
+        files: [
+          'test/karma-mocha/*.spec.js',
+          // 'src/js/*.js'
+          {
+            pattern: 'src/js/*.js',
+            watched: true,
+            included: false,
+            served: false
+          }
+        ],
+        preprocessors: {
+          'test/karma-mocha/*.spec.js': ['browserify']
+        },
+        reporters: ['mocha'],
+        // browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
+        port: 9876,
+        colors: true,
+      },
+      watch: {
         options: {
-          basePath: '',
-          frameworks: ['browserify', 'mocha', 'chai'],
-          plugins: [
-            'karma-phantomjs-launcher',
-            'karma-chrome-launcher',
-            'karma-mocha',
-            'karma-chai',
-            'karma-browserify',
-            'karma-mocha-reporter'
-          ],
-          files: [
-            'test/karma-mocha/*.spec.js',
-            {
-              pattern: 'src/js/*.js',
-              watched: true,
-              included: false,
-              served: false
-            }
-          ],
-          preprocessors: {
-            'test/karma-mocha/*.spec.js': ['browserify']
-          },
-          reporters: ['mocha'],
-          // browsers: ['Chrome'],
-          browsers: ['PhantomJS'],
-          port: 9876,
-          colors: true,
           autoWatch: true,
           singleRun: false
+        }
+      },
+      once: {
+        options: {
+          autoWatch: false,
+          singleRun: true
         }
       }
     },
@@ -125,6 +155,44 @@ module.exports = function(grunt) {
       }
     },
 
+    env: {
+      dist: {
+        LIB_DIR: '../../src/js/'
+      },
+      coverage: {
+        LIB_DIR: '../../test/coverage/instrument/src/js/'
+      }
+    },
+
+    instrument: {
+      files: ['src/js/**/*.js', '!src/js/vendor/**/*.js'],
+      options: {
+        lazy: true,
+        basePath: 'test/coverage/instrument/'
+      }
+    },
+
+    storeCoverage: {
+      options: {
+        dir: 'test/coverage/reports'
+      }
+    },
+
+    makeReport: {
+      src: 'test/coverage/reports/**/*.json',
+      options: {
+        type: 'lcov',
+        dir: 'test/coverage/reports',
+        print: 'detail'
+      }
+    },
+
+    coveralls: {
+      coverage: {
+        src: 'test/coverage/reports/**/*.info',
+      }
+    },
+
     watch: {
       appTestJs: {
         files: ['src/js/**/*.js', '!src/js/vendor/*'],
@@ -170,25 +238,38 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-istanbul');
+  grunt.loadNpmTasks('grunt-coveralls');
+  grunt.loadNpmTasks('grunt-env');
+  grunt.loadNpmTasks('grunt-open');
+
+  grunt.registerTask('coverage', [
+    'env:coverage',
+    'instrument',
+    'mochaTest',
+    'storeCoverage',
+    'makeReport',
+    'simple_log:coverage_complete'
+  ]);
+
+  grunt.registerTask('dist', [
+    'env:dist',
+    'clean',
+    'sass',
+    'jshint',
+    'browserify',
+    'mochaTest',
+    'karma:once',
+    'copy',
+    'coverage',
+    'env:dist'
+  ]);
 
   grunt.registerTask('default', [
-    'clean',
-    'copy',
-    'sass',
-    'browserify',
+    'dist',
     'serveStaticFiles',
+    'open:localhost',
     'watch'
-  ]);
-
-  grunt.registerTask('karma-test', [
-    'karma'
-  ]);
-
-  // for some reason browserify doesn't like to run after mochaTest in the grunt default task list,
-  // so separating out the test tasks for now
-  grunt.registerTask('test', [
-    'jshint',
-    'mochaTest'
   ]);
 
 };

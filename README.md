@@ -1,5 +1,7 @@
 # project-boilerplate
 
+[![Build Status](https://travis-ci.org/davidcole1977/project-boilerplate.svg)](https://travis-ci.org/davidcole1977/project-boilerplate) [![Coverage Status](https://coveralls.io/repos/davidcole1977/project-boilerplate/badge.svg)](https://coveralls.io/r/davidcole1977/project-boilerplate)
+
 > A starter boilerplate for web and JS projects with a simple default directory structure, example 'placeholder' files, JS libraries, and grunt tasks set up for various essentials such as unit testing, linting, compiling CSS and managing JS dependencies
 
 ## Dependencies
@@ -23,14 +25,16 @@ $ npm install
 ### Running the grunt tasks
 
 ```shell
-#linting and unit tests
-$ grunt test
-
-#unit tests using karma test runner
-$ grunt karma-test
-
-#default tasks / compile & copy to app directory, start static dev server, watch files
+#default tasks / compile & copy to app directory, test, start static dev server, watch files
 $ grunt
+
+#distribution / CI server tasks
+$ grunt dist
 ```
 
 *See `gruntfile.js` for more details of the grunt tasks*
+
+## known issues
+* There are separate grunt tasks for unit testing server-side node javascript (using mochaTest) and client-side browserified javascript (using karma with browserify plugins). The two key issues relating to this are:
+** There isn't yet code coverage for the tests run using karma.
+** Currently only the node/mochaTest coverage results are sent to coveralls
