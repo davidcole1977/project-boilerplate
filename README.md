@@ -1,6 +1,6 @@
 # project-boilerplate
 
-[![Build Status](https://travis-ci.org/davidcole1977/project-boilerplate.svg)](https://travis-ci.org/davidcole1977/project-boilerplate) [![Coverage Status](https://coveralls.io/repos/davidcole1977/project-boilerplate/badge.svg)](https://coveralls.io/r/davidcole1977/project-boilerplate)
+[![Build Status](https://travis-ci.org/davidcole1977/project-boilerplate.svg)](https://travis-ci.org/davidcole1977/project-boilerplate) [![Coverage Status](https://coveralls.io/repos/davidcole1977/project-boilerplate/badge.svg?branch=master)](https://coveralls.io/r/davidcole1977/project-boilerplate?branch=master)
 
 > A starter boilerplate for web and JS projects with a simple default directory structure, example 'placeholder' files, JS libraries, and grunt tasks set up for various essentials such as unit testing, linting, compiling CSS and managing JS dependencies
 
