@@ -19,6 +19,9 @@ module.exports = function(grunt) {
     grunt.log.ok(logText);
   });
 
+  // task timer
+  require('time-grunt')(grunt);
+
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
